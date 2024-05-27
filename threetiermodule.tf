@@ -9,5 +9,5 @@ module "three_tier_app" {
 }
 
 output "module_web_vm_public_ip" {
-  value = module.three_tier_app.web_vm_public_ip
+  value = module.three_tier_app.module_web_vm_public_ip
 }
