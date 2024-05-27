@@ -199,8 +199,8 @@ resource "azurerm_mysql_server" "mysql" {
   name                = "mysqlserver"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
-  administrator_login = "mysqladmin"
-  administrator_login_password = "Password1234!"
+  administrator_login = var.db_admin_username
+  administrator_login_password = var.db_admin_password
   sku_name            = "GP_Gen5_2"
   storage_mb          = 5120
   version             = "5.7"
