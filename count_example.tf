@@ -1,3 +1,7 @@
+variable "vm_count"{
+    type=number
+    default=4
+}
 resource "azurerm_virtual_network" "vnetexample" {
   name                = "example-vnet"
   address_space       = ["10.0.0.0/16"]
