@@ -24,5 +24,5 @@ module "three_tier_app_count" {
 }
 
 output "module_web_vm_public_ip" {
-  value = [for i in range(var.instance_count) : module.three_tier_app[i].module_web_vm_public_ip]
+  value = [for i in range(var.instance_count) : module.three_tier_app[i].module_web_vm_public_ip_count]
 }
