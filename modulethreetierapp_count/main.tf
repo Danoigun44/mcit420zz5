@@ -131,39 +131,60 @@ resource "azurerm_subnet_network_security_group_association" "db_assoc" {
 }
 
 # Web Tier Virtual Machine
-resource "azurerm_linux_virtual_machine" "web_vm" {
-  name                = "webVM"
-  resource_group_name = azurerm_resource_group.rg.name
-  location            = azurerm_resource_group.rg.location
-  size                = "Standard_B1s"
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
-  network_interface_ids = [
-    azurerm_network_interface.web_nic.id,
-  ]
-  os_disk {
-    caching              = "ReadWrite"
-    storage_account_type = "Standard_LRS"
+resource "azurerm_virtual_machine" "web" {
+  count                 = var.instance_count
+  name                  = "web-vm-${count.index}"
+  resource_group_name   = var.resource_group_name
+  location              = var.location
+  network_interface_ids = [azurerm_network_interface.web[count.index].id]
+  vm_size               = "Standard_DS1_v2"
+
+  os_profile {
+    computer_name  = "hostname-${count.index}"
+    admin_username = var.admin_username
+    admin_password = var.admin_password
   }
-  source_image_reference {
+
+  os_profile_linux_config {
+    disable_password_authentication = false
+  }
+
+  storage_image_reference {
     publisher = "Canonical"
     offer     = "UbuntuServer"
     sku       = "18.04-LTS"
     version   = "latest"
   }
-}
 
-resource "azurerm_network_interface" "web_nic" {
-  name                = "webNIC"
-  location            = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
-  ip_configuration {
-    name                          = "internal"
-    subnet_id                     = azurerm_subnet.web.id
-    private_ip_address_allocation = "Dynamic"
+  storage_os_disk {
+    name              = "osdisk-${count.index}"
+    caching           = "ReadWrite"
+    create_option     = "FromImage"
+    managed_disk_type = "Standard_LRS"
   }
 }
 
+resource "azurerm_network_interface" "web" {
+  count               = var.instance_count
+  name                = "web-nic-${count.index}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+
+  ip_configuration {
+    name                          = "ipconfig1"
+    subnet_id                     = azurerm_subnet.main.id
+    private_ip_address_allocation = "Dynamic"
+    public_ip_address_id          = azurerm_public_ip.web[count.index].id
+  }
+}
+
+resource "azurerm_public_ip" "web" {
+  count               = var.instance_count
+  name                = "web-pip-${count.index}"
+  location            = var.location
+  resource_group_name = var.resource_group_name
+  allocation_method   = "Dynamic"
+}
 # App Tier Virtual Machine
 resource "azurerm_linux_virtual_machine" "app_vm" {
   name                = "appVM"
