@@ -80,5 +80,9 @@ variable "windowsconfig"{
     type=string
     default="windowsconfig"
 }
+variable "instance_count" {
+  type = number
+  default = 3
+}
 variable "db_admin_username"{}
 variable "db_admin_password"{}
