@@ -2,6 +2,10 @@ variable "vm_count"{
     type=number
     default=4
 }
+variable "vm_size"{
+    type=string
+    default="Standard_F2"
+}
 resource "azurerm_virtual_network" "vnetexample" {
   name                = "example-vnet"
   address_space       = ["10.0.0.0/16"]
@@ -34,8 +38,8 @@ resource "azurerm_linux_virtual_machine" "vm" {
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   size                = var.vm_size
-  admin_username      = var.admin_username
-  admin_password      = var.admin_password
+  admin_username      = var.administrator_login
+  admin_password      = var.administrator_login_password
   network_interface_ids = [
     azurerm_network_interface.nic[count.index].id,
   ]
