@@ -172,7 +172,7 @@ resource "azurerm_network_interface" "web" {
 
   ip_configuration {
     name                          = "ipconfig1"
-    subnet_id                     = azurerm_subnet.main.id
+    subnet_id                     = azurerm_subnet.web.id
     private_ip_address_allocation = "Dynamic"
     public_ip_address_id          = azurerm_public_ip.web[count.index].id
   }
@@ -246,7 +246,4 @@ resource "azurerm_mysql_database" "exampledb" {
   collation           = "utf8_general_ci"
 }
 
-# Output the Public IP of the Web VM
-output "web_vm_public_ip" {
-  value = azurerm_linux_virtual_machine.web_vm.public_ip_address
-}
+
