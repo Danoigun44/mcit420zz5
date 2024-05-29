@@ -27,3 +27,8 @@ variable "db_admin_password" {
   description = "The admin password for the database"
   type        = string
 }
+variable "instance_count" {
+  description = "Number of instances to create"
+  type        = number
+  default     = 1
+}
