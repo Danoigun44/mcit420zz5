@@ -1,3 +1,12 @@
+variable "testoctober11"{
+    type =string
+    default="11"
+}
+variable "testoctober12"{
+    type =string
+    default="12"
+}
+
 variable "company_name"{
     type=string
     default="Montreal College Information Technology"
