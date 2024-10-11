@@ -6,6 +6,10 @@ variable "input_string" {
   type    = string
   default = "upper LOWER"
 }
+output "octobertogether"{
+  value="{$var.testoctober11}+{$var.testoctober12}"
+}
+
 # Function 1: Length of the string
 output "string_length" {
   value = length(var.original_string)
